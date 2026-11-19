@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIBE.AI — ИИ-услуги вайбкодинга</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #12121a;
+    --card: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.08);
+    --text: #e8e8f0;
+    --muted: #8a8a9a;
+    --accent1: #a855f7;
+    --accent2: #06b6d4;
+    --accent3: #ec4899;
+    --glow: rgba(168,85,247,0.4);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Animated background */
+  .bg-orbs {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.35;
+    animation: float 20s infinite ease-in-out;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent1); top: -100px; left: -100px; }
+  .orb2 { width: 600px; height: 600px; background: var(--accent2); top: 40%; right: -200px; animation-delay: -7s; }
+  .orb3 { width: 450px; height: 450px; background: var(--accent3); bottom: -100px; left: 30%; animation-delay: -14s; }
+  
+  @keyframes float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    33% { transform: translate(60px,-40px) scale(1.1); }
+    66% { transform: translate(-40px,60px) scale(0.9); }
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    backdrop-filter: blur(20px);
+    background: rgba(10,10,15,0.6);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .logo span { color: var(--text); -webkit-text-fill-color: var(--text); }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    padding: 10px 22px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: transform 0.2s, box-shadow 0.3s;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 30px var(--glow); }
+
+  /* Sections */
+  section { padding: 120px 5% 80px; max-width: 1300px; margin: 0 auto; }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-top: 160px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: rgba(168,85,247,0.1);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent1);
+    margin-bottom: 28px;
+  }
+  .badge .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent1);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--glow); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 8px transparent; }
+  }
+  h1 {
+    font-size: clamp(40px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    max-width: 1100px;
+  }
+  .gradient-text {
+    background: linear-gradient(135deg, var(--accent1) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: shine 4s linear infinite;
+  }
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+  .hero p {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--muted);
+    max-width: 680px;
+    margin-bottom: 40px;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+  .btn-primary {
+    padding: 16px 36px;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border: none;
+    border-radius: 14px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 10px 40px var(--glow);
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 50px var(--glow); }
+  .btn-secondary {
+    padding: 16px 36px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover { background: var(--card); border-color: var(--accent1); }
+
+  .hero-stats {
+    display: flex;
+    gap: 60px;
+    margin-top: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .stat-num {
+    font-size: 40px;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label { color: var(--muted); font-size: 14px; }
+
+  /* Section titles */
+  .section-title {
+    text-align: center;
+    margin-bottom: 60px;
+  }
+  .section-title .eyebrow {
+    color: var(--accent1);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+  }
+  .section-title h2 {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+  }
+  .section-title p { color: var(--muted); font-size: 17px; max-width: 600px; margin: 0 auto; }
+
+  /* Services */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  .service-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(168,85,247,0.1), rgba(6,182,212,0.05));
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .service-card:hover {
+    border-color: rgba(168,85,247,0.4);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .service-card:hover::before { opacity: 1; }
+  .service-card.highlight {
+    border-color: rgba(236,72,153,0.45);
+    background: linear-gradient(160deg, rgba(236,72,153,0.08), rgba(168,85,247,0.06));
+    box-shadow: 0 0 40px rgba(236,72,153,0.15);
+  }
+  .service-card.highlight::before {
+    background: linear-gradient(135deg, rgba(236,72,153,0.15), rgba(168,85,247,0.08));
+  }
+  .service-card.highlight:hover { border-color: rgba(236,72,153,0.7); }
+  .service-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, var(--accent3), var(--accent1));
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    z-index: 2;
+  }
+  .service-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(168,85,247,0.2), rgba(6,182,212,0.2));
+    border: 1px solid rgba(168,85,247,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .service-card.highlight .service-icon {
+    background: linear-gradient(135deg, rgba(236,72,153,0.25), rgba(168,85,247,0.2));
+    border-color: rgba(236,72,153,0.4);
+  }
+  .service-card h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  .service-card p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .service-price {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent2);
+    position: relative;
+  }
+  .service-card.highlight .service-price { color: var(--accent3); }
+
+  /* Subscription banner */
+  .sub-banner {
+    margin-top: 40px;
+    padding: 32px 40px;
+    background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(168,85,247,0.1));
+    border: 1px solid rgba(6,182,212,0.3);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .sub-banner h3 {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .sub-banner p { color: var(--muted); font-size: 15px; }
+  .sub-banner .btn-primary { padding: 12px 28px; font-size: 15px; }
+
+  /* Steps */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 32px 28px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .step:hover { border-color: rgba(6,182,212,0.4); transform: translateY(-4px); }
+  .step-num {
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    opacity: 0.4;
+    margin-bottom: 12px;
+  }
+  .step h4 { font-size: 18px; margin-bottom: 8px; }
+  .step p { color: var(--muted); font-size: 14px; }
+
+  /* Pricing */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 24px;
+  }
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px 32px;
+    transition: all 0.4s;
+    position: relative;
+  }
+  .price-card.featured {
+    border-color: rgba(168,85,247,0.5);
+    background: linear-gradient(160deg, rgba(168,85,247,0.1), rgba(6,182,212,0.05));
+    transform: scale(1.03);
+  }
+  .price-card.featured::before {
+    content: 'ХИТ';
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, var(--accent3), var(--accent1));
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .price-card:hover { transform: translateY(-6px) scale(1.03); }
+  .price-card.featured:hover { transform: translateY(-6px) scale(1.05); }
+  .plan-name { font-size: 14px; font-weight: 600; color: var(--accent1); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+  .plan-price {
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 8px;
+  }
+  .plan-price span { font-size: 18px; color: var(--muted); font-weight: 500; }
+  .plan-desc { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  .plan-features { list-style: none; margin-bottom: 32px; }
+  .plan-features li {
+    padding: 10px 0;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .plan-features li::before {
+    content: '✓';
+    color: var(--accent2);
+    font-weight: 700;
+    font-size: 14px;
+    width: 20px;
+    height: 20px;
+    background: rgba(6,182,212,0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .price-card button {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: inherit;
+  }
+  .price-card button:hover { background: var(--accent1); border-color: var(--accent1); }
+  .price-card.featured button {
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    border: none;
+    color: #fff;
+  }
+  .price-card.featured button:hover { box-shadow: 0 10px 30px var(--glow); }
+
+  /* Portfolio */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+  }
+  .portfolio-card {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--card);
+    transition: all 0.4s;
+  }
+  .portfolio-card:hover { transform: translateY(-6px); border-color: rgba(168,85,247,0.4); }
+  .portfolio-img {
+    height: 200px;
+    background: linear-gradient(135deg, rgba(168,85,247,0.3), rgba(6,182,212,0.3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    position: relative;
+  }
+  .portfolio-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), transparent);
+  }
+  .portfolio-info { padding: 24px; }
+  .portfolio-info h4 { font-size: 18px; margin-bottom: 6px; }
+  .portfolio-info p { color: var(--muted); font-size: 14px; }
+  .portfolio-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(6,182,212,0.15);
+    color: var(--accent2);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 12px;
+  }
+
+  /* FAQ */
+  .faq-list { max-width: 800px; margin: 0 auto; }
+  .faq-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.3s;
+  }
+  .faq-item.open { border-color: rgba(168,85,247,0.4); }
+  .faq-q {
+    padding: 22px 26px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .faq-q::after {
+    content: '+';
+    font-size: 24px;
+    color: var(--accent1);
+    transition: transform 0.3s;
+    line-height: 1;
+  }
+  .faq-item.open .faq-q::after { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.4s ease;
+    color: var(--muted);
+    font-size: 15px;
+    padding: 0 26px;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding: 0 26px 22px; }
+
+  /* Contact / CTA */
+  .cta-section {
+    max-width: 900px;
+    margin: 0 auto;
+    background: linear-gradient(160deg, rgba(168,85,247,0.15), rgba(6,182,212,0.1));
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 32px;
+    padding: 60px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(168,85,247,0.15), transparent 40%);
+    animation: rotate 20s linear infinite;
+  }
+  @keyframes rotate { to { transform: rotate(360deg); } }
+  .cta-section > * { position: relative; }
+  .cta-section h2 { font-size: clamp(28px, 5vw, 44px); margin-bottom: 16px; letter-spacing: -1px; }
+  .cta-section p { color: var(--muted); margin-bottom: 32px; font-size: 17px; }
+  .contact-form {
+    display: flex;
+    gap: 12px;
+    max-width: 500px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+  .contact-form input {
+    flex: 1;
+    min-width: 200px;
+    padding: 16px 20px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .contact-form input:focus { border-color: var(--accent1); }
+  .contact-form input::placeholder { color: var(--muted); }
+
+  /* Footer */
+  footer {
+    padding: 60px 5% 40px;
+    border-top: 1px solid var(--border);
+    margin-top: 80px;
+    text-align: center;
+  }
+  .footer-content {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  footer p { color: var(--muted); font-size: 14px; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--text); }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: linear-gradient(135deg, var(--accent1), var(--accent2));
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: all 0.4s;
+    z-index: 1000;
+    box-shadow: 0 10px 40px var(--glow);
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    section { padding: 80px 5% 60px; }
+    .hero { padding-top: 120px; }
+    .hero-stats { gap: 30px; }
+    .price-card.featured { transform: none; }
+    .price-card.featured:hover { transform: translateY(-6px); }
+    .cta-section { padding: 40px 24px; }
+    .sub-banner { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<nav>
+  <div class="logo">VIBE<span>.AI</span></div>
+  <div class="nav-links">
+    <a href="#services">Услуги</a>
+    <a href="#how">Как работает</a>
+    <a href="#pricing">Тарифы</a>
+    <a href="#portfolio">Работы</a>
+    <a href="#faq">FAQ</a>
+  </div>
+  <button class="nav-cta" onclick="scrollToForm()">Начать проект</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="badge"><span class="dot"></span> Работаем на Claude, GPT-5, Midjourney и Cursor</div>
+  <h1>ИИ-услуги <span class="gradient-text">вайбкодинга</span> для тех, кто ценит скорость</h1>
+  <p>Создаём сайты, веб-приложения, ИИ-видео и фото, ботов и MVP за часы, а не месяцы. Человеческий контроль качества + скорость искусственного интеллекта.</p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="scrollToForm()">Обсудить проект →</button>
+    <button class="btn-secondary" onclick="document.getElementById('services').scrollIntoView()">Смотреть услуги</button>
+  </div>
+  <div class="hero-stats">
+    <div><div class="stat-num">470+</div><div class="stat-label">проектов сдано</div></div>
+    <div><div class="stat-num">24ч</div><div class="stat-label">средний срок лендинга</div></div>
+    <div><div class="stat-num">4.9★</div><div class="stat-label">рейтинг клиентов</div></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="reveal">
+  <div class="section-title">
+    <div class="eyebrow">Услуги</div>
+    <h2>Что мы делаем на ИИ</h2>
+    <p>От простого лендинга до полноценного SaaS и ИИ-видео — всё собирается вайбкодингом</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <h3>Создание сайтов</h3>
+      <p>Лендинги, корпоративные сайты, портфолио, блоги. Адаптив, анимации, SEO — под ключ.</p>
+      <div class="service-price">от 1 490 ₸ · 24-72 часа</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Vibe-coding проектов</h3>
+      <p>Полноценные веб-приложения и MVP стартапов. Идея → рабочий продукт без месяцев разработки.</p>
+      <div class="service-price">от 4 990 ₸ · 5-14 дней</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🤖</div>
+      <h3>Telegram-боты</h3>
+      <p>Боты для бизнеса, магазины, автоворонки, интеграции с CRM, оплатой и ИИ-ассистентами.</p>
+      <div class="service-price">от 2 490 ₸ · 1-3 дня</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛒</div>
+      <h3>Интернет-магазины</h3>
+      <p>Магазины на Next.js / Shopify с корзиной, оплатой, админкой и интеграциями доставки.</p>
+      <div class="service-price">от 4 990 ₸ · 3-7 дней</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>Редизайн и UI/UX</h3>
+      <p>Обновляем устаревшие сайты: современный дизайн, скорость, конверсия и мобильная версия.</p>
+      <div class="service-price">от 2 990 ₸ · 2-4 дня</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔧</div>
+      <h3>Парсинг и автоматизация</h3>
+      <p>Скрипты для парсинга данных, автоматизация рутины, интеграции API и Google Sheets/Notion.</p>
+      <div class="service-price">от 1 990 ₸ · 1-2 дня</div>
+    </div>
+
+    <!-- NEW SERVICES -->
+    <div class="service-card highlight">
+      <div class="service-badge">18+ / БЕЗ ЦЕНЗУРЫ</div>
+      <div class="service-icon">🎬</div>
+      <h3>ИИ-видео и фото без цензуры</h3>
+      <p>Генерация видео и изображений без стандартных контент-ограничений. Для арт-проектов, креативных задач, рекламы и персональных запросов. Kling, Runway, Midjourney, Flux — без фильтров.</p>
+      <div class="service-price">от 990 ₸ · 1-6 часов</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧑‍🎤</div>
+      <h3>ИИ-аватары и озвучка</h3>
+      <p>Говорящие аватары, клонирование голоса, озвучка на любом языке. Для контента, обучения и презентаций.</p>
+      <div class="service-price">от 1 990 ₸ · 1-2 дня</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📱</div>
+      <h3>ИИ-контент по подписке</h3>
+      <p>Ежемесячный пакет постов, рилсов, баннеров и сторис на ИИ. Подписка на SMM-контент для соцсетей.</p>
+      <div class="service-price">от 2 990 ₸/мес · подписка</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🧠</div>
+      <h3>ИИ-ассистент для бизнеса</h3>
+      <p>Кастомные чат-боты на GPT, обученные на ваших данных. Консультант, продавец, поддержка 24/7.</p>
+      <div class="service-price">от 3 490 ₸ · 2-4 дня</div>
+    </div>
+  </div>
+
+  <!-- SUBSCRIPTION BANNER -->
+  <div class="sub-banner">
+    <div>
+      <h3>📦 Подписка VIBE.AI — ещё выгоднее</h3>
+      <p>Ежемесячный пакет: сайт на поддержке + 20 ИИ-видео + 100 ИИ-фото + бот + контент. Всё вместе от 7 990 ₸/мес. Отменить можно в любой момент.</p>
+    </div>
+    <button class="btn-primary" onclick="scrollToForm()">Оформить подписку →</button>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="reveal">
+  <div class="section-title">
+    <div class="eyebrow">Процесс</div>
+    <h2>Как мы работаем</h2>
+    <p>Прозрачный процесс от идеи до результата</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h4>Бриф</h4>
+      <p>Обсуждаем задачу, цели, референсы. 15 минут — и картина ясна.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h4>Прототип</h4>
+      <p>Собираем макет и структуру на ИИ за несколько часов. Согласовываем.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h4>Разработка</h4>
+      <p>Вайбкодим реальный продукт: код, дизайн, анимации, интеграции.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h4>Запуск</h4>
+      <p>Тестируем, публикуем, передаём доступы. Бесплатная поддержка 14 дней.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing" class="reveal">
+  <div class="section-title">
+    <div class="eyebrow">Тарифы</div>
+    <h2>Прозрачные цены</h2>
+    <p>Фиксированная стоимость в тенге. Никаких скрытых доплат</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="plan-name">Start</div>
+      <div class="plan-price">1 490 <span>₸</span></div>
+      <div class="plan-desc">Для быстрого лендинга или визитки</div>
+      <ul class="plan-features">
+        <li>Одностраничный сайт</li>
+        <li>До 5 секций</li>
+        <li>Адаптив под мобильные</li>
+        <li>Форма обратной связи</li>
+        <li>Срок: 24-48 часов</li>
+      </ul>
+      <button onclick="scrollToForm()">Заказать</button>
+    </div>
+    <div class="price-card featured">
+      <div class="plan-name">Pro</div>
+      <div class="plan-price">4 990 <span>₸</span></div>
+      <div class="plan-desc">Оптимально для бизнеса и проектов</div>
+      <ul class="plan-features">
+        <li>Многостраничный сайт / MVP</li>
+        <li>До 10 страниц + анимации</li>
+        <li>Интеграция с CRM и оплатой</li>
+        <li>SEO-базовая оптимизация</li>
+        <li>Подключение домена</li>
+        <li>Срок: 3-7 дней</li>
+      </ul>
+      <button onclick="scrollToForm()">Выбрать Pro</button>
+    </div>
+    <div class="price-card">
+      <div class="plan-name">Business</div>
+      <div class="plan-price">10 990 <span>₸</span></div>
+      <div class="plan-desc">Полноценный продукт под ключ</div>
+      <ul class="plan-features">
+        <li>Веб-приложение / SaaS</li>
+        <li>Личный кабинет и БД</li>
+        <li>Админ-панель</li>
+        <li>Интеграции и API</li>
+        <li>Месяц поддержки бесплатно</li>
+        <li>Срок: 7-14 дней</li>
+      </ul>
+      <button onclick="scrollToForm()">Обсудить</button>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="reveal">
+  <div class="section-title">
+    <div class="eyebrow">Портфолио</div>
+    <h2>Свежие работы</h2>
+    <p>Реальные проекты, сделанные с помощью ИИ-вайбкодинга</p>
+  </div>
+  <div class="portfolio-grid">
+    <div class="portfolio-card">
+      <div class="portfolio-img">🚀</div>
+      <div class="portfolio-info">
+        <h4>SaaS для аналитики</h4>
+        <p>Платформа с дашбордами и AI-отчётами</p>
+        <span class="portfolio-tag">Next.js · 9 дней</span>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-img">🍕</div>
+      <div class="portfolio-info">
+        <h4>Сайт доставки еды</h4>
+        <p>Магазин с корзиной и онлайн-оплатой</p>
+        <span class="portfolio-tag">React · 4 дня</span>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-img">💼</div>
+      <div class="portfolio-info">
+        <h4>Лендинг для агентства</h4>
+        <p>Конверсионный лендинг с анимациями</p>
+        <span class="portfolio-tag">HTML/CSS · 1 день</span>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-img">🤖</div>
+      <div class="portfolio-info">
+        <h4>Telegram-бот продаж</h4>
+        <p>Автоворонка с оплатой и CRM</p>
+        <span class="portfolio-tag">Python · 2 дня</span>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-img">🎬</div>
+      <div class="portfolio-info">
+        <h4>ИИ-видео для бренда</h4>
+        <p>Рекламный ролик, сгенерированный Kling + Runway</p>
+        <span class="portfolio-tag">AI Video · 6 часов</span>
+      </div>
+    </div>
+    <div class="portfolio-card">
+      <div class="portfolio-img">🎨</div>
+      <div class="portfolio-info">
+        <h4>Арт-серия без цензуры</h4>
+        <p>Креативные визуалы для закрытого проекта</p>
+        <span class="portfolio-tag">Midjourney/Flux · 3 часа</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="reveal">
+  <div class="section-title">
+    <div class="eyebrow">FAQ</div>
+    <h2>Частые вопросы</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">Что такое вайбкодинг?</div>
+      <div class="faq-a">Это подход, при котором человек управляет процессом разработки, а ИИ пишет код. Мы быстро собираем полноценные проекты, а человек-разработчик контролирует качество, безопасность и логику.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Код принадлежит мне?</div>
+      <div class="faq-a">Да, полностью. После сдачи проекта вы получаете исходники и полные права. Мы не удерживаем ваш продукт.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Что значит «без цензуры» в ИИ-видео/фото?</div>
+      <div class="faq-a">Мы используем модели и пайплайны без стандартных контент-фильтров (Flux без safety, Kling без ограничений и т.д.). Работаем в рамках закона РК — для арт-проектов, рекламы, креатива и закрытых задач.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Какие сроки?</div>
+      <div class="faq-a">Лендинг — 24-48 часов, MVP — 5-14 дней, ИИ-видео/фото — от 1 часа. Точный срок обсуждаем на брифе.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Есть ли подписка?</div>
+      <div class="faq-a">Да, от 7 990 ₸/мес — включает сайт на поддержке, 20 ИИ-видео, 100 ИИ-фото, бота и SMM-контент. Отмена в любой момент.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Есть ли поддержка после сдачи?</div>
+      <div class="faq-a">Да. На тарифе Pro — 14 дней, на Business — месяц бесплатной поддержки. Дальше — по договорённости.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Как оплатить?</div>
+      <div class="faq-a">50% предоплата, 50% после сдачи. Принимаем Kaspi, карты, СБП, криптовалюту. Работаем с физлицами и компаниями (счёт/договор).</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="reveal" id="contact">
+  <div class="cta-section">
+    <h2>Готовы запустить <span class="gradient-text">свой проект?</span></h2>
+    <p>Оставьте контакт — заявка уйдёт напрямую менеджеру в Telegram (@budzl) с уже готовым сообщением</p>
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <input type="text" name="name" placeholder="Ваше имя" required>
+      <input type="text" name="contact" placeholder="Telegram / телефон" required>
+      <button type="submit" class="btn-primary" style="flex:1;min-width:140px;">Отправить →</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-content">
+    <div class="logo">VIBE<span style="color:var(--text)">.AI</span></div>
+    <div class="footer-links">
+      <a href="#services">Услуги</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Контакты</a>
+    </div>
+    <p>© 2025 VIBE.AI · Все права защищены</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast">✓ Открываем Telegram — отправьте сообщение</div>
+
+<script>
+  /* ============================================================
+     ОТПРАВКА ЗАЯВКИ В TELEGRAM — СПОСОБ 1
+     ============================================================
+     При отправке формы открывается чат @budzl с уже готовым
+     сообщением (имя + контакт). Клиенту остаётся нажать кнопку
+     «Отправить» в Telegram. Без ботов, без токенов — работает сразу.
+     ============================================================ */
+  const TG_USERNAME = 'budzl';
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll to form
+  function scrollToForm() {
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Submit — открывает Telegram @budzl с готовым сообщением
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const name = (form.querySelector('input[name="name"]').value || '').trim();
+    const contact = (form.querySelector('input[name="contact"]').value || '').trim();
+
+    const message =
+      '🔥 Новая заявка VIBE.AI\n\n' +
+      '👤 Имя: ' + name + '\n' +
+      '📞 Контакт: ' + contact + '\n' +
+      '🌐 Источник: сайт vibe.ai';
+
+    const url = 'https://t.me/' + TG_USERNAME + '?text=' + encodeURIComponent(message);
+    window.open(url, '_blank');
+
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    form.reset();
+    setTimeout(() => toast.classList.remove('show'), 4000);
+  }
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Animated counters
+  function animateCounters() {
+    document.querySelectorAll('.stat-num').forEach(el => {
+      const text = el.textContent;
+      const match = text.match(/(\d+)/);
+      if (!match) return;
+      const target = parseInt(match[1]);
+      const suffix = text.replace(match[1], '').replace(/[0-9]/g, '');
+      let current = 0;
+      const step = Math.max(1, Math.floor(target / 40));
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = current + suffix;
+      }, 30);
+    });
+  }
+
+  const heroObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      animateCounters();
+      heroObserver.disconnect();
+    }
+  }, { threshold: 0.5 });
+  heroObserver.observe(document.querySelector('.hero-stats'));
+</script>
+</body>
+</html>
